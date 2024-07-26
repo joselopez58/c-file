@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "config.h"
+#include "LiquidCrystal.h"
+
+# define _XTAL_FREQ 1000000 
+
+// Define pushbutton pins
+#define OFF_DISPLAY PORTBbits.RB0
+#define ADDITIONFUNCT PORTBbits.RB1
+#define SUBTRACTIONFUNCT PORTBbits.RB2
+#define MULTIPLICATIONFUNCT PORTBbits.RB2
+
+// Function prototypes
+void setup();
+void loop();
+void updateDisplay();
+
+// Global variable to store the counter value
+volative int pot1;
+volative int pot2
+volative int result;
+int counter = 0;
+
+int main() {
+    // Initial setup
+     // ALL ANx input are digital
+    ADCON1 = 0x0f;
+    
+    // Data pins connected to PORTA
+    TRISA = 0x00; 
+    
+    // RS = RD0
+    // RW = RD1
+    // E  = RD2
+    TRISD = 0x00;
+    
+    
+
+    // Setup the LCD
+    pin_setup(&PORTA, &PORTD);
+    begin(16, 2, LCD_5x8DOTS);
+
+    // Print initial counter value
+    clear();
+    setCursor(0, 0);
+    print("Counter: ");
+    setCursor(0, 1);
+    print_int(counter);
+    // Main loop
+    while(1) {
+        loop();
+    }
+
+    return (EXIT_SUCCESS);
+}
+
+
+void loop() {
+    // Check for increment button press
+    if (OFF_DISPLAY == 1) {
+        __delay_ms(200); // Debounce delay
+         displayOFF();
+    }
+
+    // Check for decrement button press
+    if ( ADDITIONFUNCT== 1) {
+        __delay_ms(200); // Debounce delay
+        result=pot1+pot2;
+        }
+    }
+
+    if ( SUBTRACTIONFUNCT== 1) {
+        __delay_ms(200); // Debounce delay
+        result=pot1-pot2;
+        }
+    }
+     if ( MULTIPLICATIONFUNCT== 1) {
+        __delay_ms(200); // Debounce delay
+        result=pot1*pot2;
+        }
+    }
+
+void updateDisplay() {
+    clear();
+    setCursor(0, 0);
+    print_int(pot1);
+     print(" + ");
+    print_int(pot2);
+    setCursor(0, 1);
+    print_int(result);
+}
